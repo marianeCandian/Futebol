@@ -23,4 +23,20 @@ export default class TeamService {
     });
     return result;
   };
+
+  public verifyQuery = (query: string) => {
+    if (query === 'true') return true;
+
+    return false;
+  };
+
+  public findByProgress = async (query: string): Promise<Matches[]> => {
+    const queryBool = this.verifyQuery(query);
+    const result = await this._matchModel.findAll({
+      where: { inProgress: queryBool },
+      include: [{ model: this._teamModel, as: 'awayTeam' },
+        { model: this._teamModel, as: 'homeTeam' }],
+    });
+    return result;
+  };
 }
