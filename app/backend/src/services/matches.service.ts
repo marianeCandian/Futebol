@@ -39,4 +39,11 @@ export default class TeamService {
     });
     return result;
   };
+
+  public finishMatch = async (id: number): Promise<void> => {
+    await this._matchModel.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+  };
 }
