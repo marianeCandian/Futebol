@@ -9,11 +9,6 @@ class Matches extends Model {
   declare awayTeamId: number;
   declare awayTeamGoals: number;
   declare inProgress: boolean;
-
-  // public static associations: {
-  //   home_team: Association<Matches, Teams>;
-  //   away_team: Association<Matches, Teams>;
-  // };
 }
 
 Matches.init(
@@ -55,21 +50,18 @@ Matches.init(
     },
   },
   {
-    modelName: 'matches',
+    modelName: 'Matches',
+    tableName: 'matches',
     sequelize: db,
     timestamps: false,
     underscored: true,
   },
 
-  // Matches.belongsTo(Teams, {
-  //   as: 'home_team',
-  //   foreignKey: 'home_team_id',
-  // });
+  // Teams.hasMany(Matches, { foreignKey: 'id', as: 'awaysTeamId' });
+  // Teams.hasMany(Matches, { foreignKey: 'id', as: 'homeTeamId' });
 
-  // Matches.belongsTo(Teams, {
-  //   as: 'away_team',
-  //   foreignKey: 'away_team_id',
-  // });
+  // Matches.belongsTo(Teams, { foreignKey: 'away_team_id', as: 'awaysTeamId' });
+  // Matches.belongsTo(Teams, { foreignKey: 'home_team_id', as: 'homeTeamId' });
 
 );
 

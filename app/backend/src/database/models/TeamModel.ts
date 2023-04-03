@@ -20,7 +20,8 @@ Teams.init(
     },
   },
   {
-    modelName: 'teams',
+    modelName: 'Teams',
+    tableName: 'teams',
     sequelize: db,
     timestamps: false,
     underscored: true,
