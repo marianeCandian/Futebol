@@ -2,7 +2,7 @@ import { ModelStatic } from 'sequelize';
 import Teams from '../database/models/TeamModel';
 import Matches from '../database/models/MatchesModel';
 
-export default class TeamService {
+export default class MatchesService {
   private _matchModel: ModelStatic<Matches>;
   private _teamModel: ModelStatic<Teams>;
 
@@ -45,5 +45,38 @@ export default class TeamService {
       { inProgress: false },
       { where: { id } },
     );
+  };
+
+  public updateScore = async (
+    awayTeamGoals: number,
+    homeTeamGoals: number,
+    id: number,
+  ): Promise<void> => {
+    await this._matchModel.update(
+      { awayTeamGoals, homeTeamGoals },
+      { where: { id } },
+    );
+  };
+
+  public creatMatch = async (
+    homeTeamId: number,
+    awayTeamId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<Matches> => {
+    const newMatch = {
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+    };
+
+    const createdMatch = await this._matchModel.create({ ...newMatch, inProgress: true });
+    return createdMatch;
+  };
+
+  public findById = async (homeTeamId: number, awayTeamId: number): Promise<Matches[]> => {
+    const id = await this._matchModel.findAll({ where: { homeTeamId, awayTeamId } });
+    return id;
   };
 }
