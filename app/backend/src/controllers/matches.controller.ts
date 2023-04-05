@@ -46,14 +46,9 @@ export default class MatchesController {
 
   public creatMatch = async (req: Request, res: Response): Promise<void | Response> => {
     try {
-      const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
-      const findId = await this._matchService.findById(homeTeamId, awayTeamId);
-      if (!findId || findId.length > 1) {
-        return res.status(404).json({ message: 'There is no team with such id!' });
-      }
-      const result = await this._matchService
-        .creatMatch(homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals);
-      return res.status(201).json(result);
+      const newMatch = req.body;
+      const match = await this._matchService.creatMatch(newMatch);
+      return res.status(201).json(match);
     } catch (error) {
       console.log(error);
     }

@@ -1,4 +1,5 @@
 import { ModelStatic } from 'sequelize';
+import { INewMatch } from '../interfaces/INewMath';
 import Teams from '../database/models/TeamModel';
 import Matches from '../database/models/MatchesModel';
 
@@ -40,7 +41,7 @@ export default class MatchesService {
     return result;
   };
 
-  public finishMatch = async (id: number): Promise<void> => {
+  public finishMatch = async (id: number) => {
     await this._matchModel.update(
       { inProgress: false },
       { where: { id } },
@@ -51,32 +52,15 @@ export default class MatchesService {
     awayTeamGoals: number,
     homeTeamGoals: number,
     id: number,
-  ): Promise<void> => {
+  ) => {
     await this._matchModel.update(
       { awayTeamGoals, homeTeamGoals },
       { where: { id } },
     );
   };
 
-  public creatMatch = async (
-    homeTeamId: number,
-    awayTeamId: number,
-    homeTeamGoals: number,
-    awayTeamGoals: number,
-  ): Promise<Matches> => {
-    const newMatch = {
-      homeTeamId,
-      awayTeamId,
-      homeTeamGoals,
-      awayTeamGoals,
-    };
-
+  public creatMatch = async (newMatch: INewMatch): Promise<Matches> => {
     const createdMatch = await this._matchModel.create({ ...newMatch, inProgress: true });
     return createdMatch;
-  };
-
-  public findById = async (homeTeamId: number, awayTeamId: number): Promise<Matches[]> => {
-    const id = await this._matchModel.findAll({ where: { homeTeamId, awayTeamId } });
-    return id;
   };
 }
