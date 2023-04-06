@@ -16,9 +16,11 @@ export default class LoginController {
     return res.status(code).json({ token: message });
   };
 
-  public getRole = async (req: Request, res: Response) => {
-    const userLogged = req.body.data;
+  public getRole = async (_req: Request, res: Response) => {
+    const { payload } = res.locals;
+    const { data: { role } } = payload;
+    console.log(role);
 
-    res.status(200).json({ role: userLogged.role });
+    return res.status(200).json({ role });
   };
 }
