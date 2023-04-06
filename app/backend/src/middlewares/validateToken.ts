@@ -7,7 +7,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
     if (!authorization) return res.status(401).json({ message: 'Token not found' });
     const payload = await validateToken(authorization);
-    // req.body = payload;
     res.locals.payload = payload;
     return next();
   } catch (error) {
