@@ -9,9 +9,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const payload = await validateToken(authorization);
     // req.body = payload;
     res.locals.payload = payload;
+    return next();
   } catch (error) {
     res.status(401).json({ message: 'Token must be a valid token' });
   }
-
-  return next();
 };
