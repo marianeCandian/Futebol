@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-// import { JwtPayload } from 'jsonwebtoken';
 import { validateToken } from '../utils/generateToken';
 
 export default async (req: Request, res: Response, next: NextFunction) => {
