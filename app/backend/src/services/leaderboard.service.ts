@@ -15,15 +15,10 @@ export default class LeaderboardService {
 
   private sortArray = (leaderboardArray: ILeaderboard[]): ILeaderboard[] => {
     const organized = leaderboardArray.sort((a, b) => {
-      if (a.totalPoints > b.totalPoints) return -1;
-      if (b.totalPoints > a.totalPoints) return 1;
-      if (a.totalVictories < b.totalVictories) return 1;
-      if (a.totalVictories > b.totalVictories) return -1;
-      if (a.goalsBalance > b.goalsBalance) return -1;
-      if (a.goalsBalance < b.goalsBalance) return 1;
-      if (a.goalsFavor > b.goalsFavor) return -1;
-      if (a.goalsFavor < b.goalsFavor) return 1;
-
+      if (a.totalPoints !== b.totalPoints) return b.totalPoints - a.totalPoints;
+      if (a.totalVictories !== b.totalVictories) return b.totalVictories - a.totalVictories;
+      if (a.goalsBalance !== b.goalsBalance) return b.goalsBalance - a.goalsBalance;
+      if (a.goalsFavor !== b.goalsFavor) return b.goalsFavor - a.goalsFavor;
       return 0;
     });
 

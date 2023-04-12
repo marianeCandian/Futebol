@@ -24,114 +24,79 @@ export default class Leaderboard {
     this._totalLosses = this.getTotalLosses();
     this._goalsFavor = this.getGoalsFavor();
     this._goalsOwn = this.getGoalsOwn();
-    this._totalGames = this._totalVictories + this._totalDraws + this._totalLosses;
-    this._totalPoints = this._totalVictories * 3 + this._totalDraws;
+    this._totalGames = this.getTotalGames();
+    this._totalPoints = (this._totalVictories * 3) + this._totalDraws;
     this._goalsBalance = this._goalsFavor - this._goalsOwn;
-    this._efficiency = Number(this.getEfficiency().toFixed(2));
+    this._efficiency = Number(this.getEfficienty());
   }
 
-  private getTotalVictories = () => {
-    const victories = this._matches.reduce((acc, cur) => {
-      if (
-        cur.homeTeamId === this._team.id && !cur.inProgress && cur.homeTeamGoals > cur.awayTeamGoals
-      ) {
-        return acc + 1;
-      } if (
-        cur.awayTeamId === this._team.id && !cur.inProgress && cur.homeTeamGoals < cur.awayTeamGoals
-      ) {
-        return acc + 1;
-      }
-      return acc;
-    }, 0);
+  private getEfficienty = () => {
+    const division = (this._totalPoints / (this._totalGames * 3)) * 100;
+    const arround = division.toFixed(2);
+    return arround;
+  };
 
-    return victories;
+  private getTotalVictories = () => {
+    let value = 0;
+    this._matches.forEach((e) => {
+      if (e.inProgress === false
+         && this._team.id === e.homeTeamId && e.homeTeamGoals > e.awayTeamGoals) {
+        value += 1;
+      }
+    });
+    return value;
+  };
+
+  private getTotalGames = () => {
+    let value = 0;
+    this._matches.forEach((e) => {
+      if (this._team.id === e.homeTeamId && e.inProgress === false) {
+        value += 1;
+      }
+    });
+    return value;
   };
 
   private getTotalDraws = () => {
-    const draws = this._matches.reduce((acc, cur) => {
-      if (
-        cur.homeTeamId === this._team.id
-        && !cur.inProgress
-        && cur.homeTeamGoals === cur.awayTeamGoals
-      ) {
-        return acc + 1;
-      } if (
-        cur.awayTeamId === this._team.id
-        && !cur.inProgress
-        && cur.homeTeamGoals === cur.awayTeamGoals
-      ) {
-        return acc + 1;
+    let value = 0;
+    this._matches.forEach((e) => {
+      if (e.homeTeamGoals === e.awayTeamGoals
+         && e.inProgress === false && this._team.id === e.homeTeamId) {
+        value += 1;
       }
-      return acc;
-    }, 0);
-
-    return draws;
+    });
+    return value;
   };
 
   private getTotalLosses = () => {
-    const draws = this._matches.reduce((acc, cur) => {
-      if (
-        cur.homeTeamId === this._team.id
-        && !cur.inProgress
-        && cur.homeTeamGoals < cur.awayTeamGoals
-      ) {
-        return acc + 1;
-      } if (
-        cur.awayTeamId === this._team.id
-        && !cur.inProgress
-        && cur.homeTeamGoals > cur.awayTeamGoals
-      ) {
-        return acc + 1;
+    let value = 0;
+    this._matches.forEach((e) => {
+      if (e.homeTeamGoals < e.awayTeamGoals
+         && e.inProgress === false && this._team.id === e.homeTeamId) {
+        value += 1;
       }
-      return acc;
-    }, 0);
-
-    return draws;
+    });
+    return value;
   };
 
   private getGoalsFavor = () => {
-    const goalsFavor = this._matches.reduce((acc, cur) => {
-      if (
-        cur.homeTeamId === this._team.id
-        && !cur.inProgress
-      ) {
-        return acc + cur.homeTeamGoals;
-      } if (
-        cur.awayTeamId === this._team.id
-        && !cur.inProgress
-      ) {
-        return acc + cur.awayTeamGoals;
+    let value = 0;
+    this._matches.forEach((e) => {
+      if (this._team.id === e.homeTeamId && e.inProgress === false) {
+        value += e.homeTeamGoals;
       }
-      return acc;
-    }, 0);
-
-    return goalsFavor;
+    });
+    return value;
   };
 
   private getGoalsOwn = () => {
-    const goalsOwn = this._matches.reduce((acc, cur) => {
-      if (
-        cur.homeTeamId === this._team.id
-        && !cur.inProgress
-      ) {
-        return acc + cur.awayTeamGoals;
-      } if (
-        cur.awayTeamId === this._team.id
-        && !cur.inProgress
-      ) {
-        return acc + cur.homeTeamGoals;
+    let value = 0;
+    this._matches.forEach((e) => {
+      if (this._team.id === e.homeTeamId && e.inProgress === false) {
+        value += e.awayTeamGoals;
       }
-      return acc;
-    }, 0);
-
-    return goalsOwn;
-  };
-
-  private getEfficiency = () => {
-    const division = this._totalPoints / (this._totalGames * 3);
-    const efficiency = division * 100;
-
-    return efficiency;
+    });
+    return value;
   };
 
   public getAll = () => {
